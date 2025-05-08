@@ -1,0 +1,393 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ders Seçim Rehberi</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        body {
+            background: #E7E7E7;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh; /* Ekranı tamamen kaplasın */
+            margin: 0;
+            padding: 0;
+        }
+        
+        .left-panel, .middle-panel, .right-panel {
+            height: 100%; /* Her panel tam boy olacak */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f9f6f2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+        }
+        
+        .left-panel {
+            flex: 1;
+            text-align: center;
+            padding: 30px;
+            border-radius: 0px;
+        }
+        
+        .middle-panel {
+            flex: 2.5; /* Orta panel daha geniş */
+            text-align: center;
+            padding: 30px;
+            border-radius: 0px;
+        }
+        
+        .right-panel {
+            flex: 1;
+            text-align: center;
+            padding: 30px;
+            border-radius: 0px;
+            overflow-y: auto; /* Sağ panelde scroll açılabilir */
+        }
+        
+        /* Sol Panel İçeriği */
+        .panel-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .feature-list {
+            list-style-type: disc;
+            padding-left: 20px;
+            text-align: left;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .image-container {
+            margin-top: 20px;
+        }
+        
+        .student-image {
+            width: 220px;
+            height: auto;
+        }
+        
+        /* Orta Panel İçeriği */
+        .middle-panel h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .middle-panel p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .form-section {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+            width: 100%;
+        }
+        
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        .recommend-button {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        
+        .recommend-button:hover {
+            background: #388e3c;
+        }
+        
+        /* Sağ Panel İçeriği */
+        .right-panel h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .category-list button {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        
+        .category-list button:hover {
+            background: #f0f0f0;
+        }
+        
+        /* Dinamik Butonlar (Dersleri Görüntüle / Konuları Görüntüle) */
+        .dynamic-options {
+            width: 100%;
+            margin-top: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .dynamic-options button {
+            background: #e9ecef;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .dynamic-options button:hover {
+            background: #dee2e6;
+        }
+        
+        /* Konu Başlıkları */
+        #topicList {
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        #topicList h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        #topics button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 6px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        #topics button:hover {
+            background: #f0f0f0;
+        }
+        
+        /* Sosyal Medya İkonları */
+        .social-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .social-icons a {
+            color: #333;
+            font-size: 24px;
+            transition: 0.3s;
+        }
+        
+        .social-icons a:hover:nth-child(1) { color: #0077b5; }
+        .social-icons a:hover:nth-child(2) { color: #000; }
+        .social-icons a:hover:nth-child(3) { color: #E4405F; }
+        </style>
+        
+    
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Sol Panel -->
+        <div class="left-panel">
+            <h2 class="panel-title">Sistem Özellikleri</h2>
+            <ul class="feature-list">
+                <li>İlgi alanınıza ve akademik hedeflere göre ders önerir.</li>
+                <li>Kolay kategori seçimi ve detaylı konu seçimi.</li>
+                <li>Akıllı öneri sistemiyle en uygun dersler.</li>
+            </ul>
+            <div class="image-container">
+                <img src="{% static 'images/resim.png' %}" alt="Öğrenci Okuma" class="student-image">
+            </div>
+        </div>
+  <!-- Orta Panel -->
+<div class="middle-panel">
+    <h1>Ders Seçim Rehberi</h1>
+    <p>İlgi alanınıza göre en doğru dersleri bulun.</p>
+
+    <div class="form-section">
+        <form id="recommendationForm" onsubmit="redirectToRecommendation(event)">
+            <div class="form-group">
+                <label for="kategori">Kategori Seçin:</label>
+                <select id="kategori" name="kategori">
+                    <option value="universite_mesleki_secmeli">Üniversite Mesleki Seçmeli</option>
+                    <option value="sosyal_secmeli">Sosyal Seçmeli</option>
+                    <option value="mesleki_b">Mesleki Seçmeli B</option>
+                    <option value="mesleki_a">Mesleki Seçmeli A</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ilgi_alani">İlgi Alanınızı Girin:</label>
+                <input type="text" id="ilgi_alani" name="ilgi_alani" placeholder="Örneğin: yapay zeka, finans, sanat...">
+            </div>
+            <button type="submit" class="recommend-button">Ders Öner</button>
+        </form>
+    </div>
+</div>
+
+<!-- Sağ Panel (tamamen ayrı kutu!) -->
+<div class="right-panel">
+    <h2>Kategoriler</h2>
+    <div class="category-list">
+        <button onclick="showOptions('universite_mesleki_secmeli')">Üniversite Mesleki Seçmeli</button>
+        <button onclick="showOptions('sosyal_secmeli')">Sosyal Seçmeli</button>
+        <button onclick="showOptions('mesleki_b')">Mesleki B</button>
+        <button onclick="showOptions('mesleki_a')">Mesleki A</button>
+    </div>
+
+    <!-- Dersleri ve Ders Konularını Görüntüle Butonları -->
+    <div class="dynamic-options" id="categoryOptions" style="display:none; margin-top:20px;">
+        <button id="viewCourses">Dersleri Görüntüle</button>
+        <button id="viewTopics">Ders Konularını Görüntüle</button>
+    </div>
+
+    <!-- Konu Başlıkları -->
+    <div id="topicList" class="dynamic-options" style="display:none; margin-top:20px;">
+        <h3>Konu Başlıkları</h3>
+        <div id="topics"></div>
+    </div>
+</div>
+
+    
+
+
+<!-- Sosyal Medya İkonları -->
+<div class="social-icons">
+    <a href="https://www.linkedin.com/in/muhammed-dilber-7679641b8/" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <a href="https://github.com/Mhmmddlber" target="_blank"><i class="fab fa-github"></i></a>
+    <a href="https://www.instagram.com/muhammed_dlbr/" target="_blank"><i class="fab fa-instagram"></i></a>
+</div>
+
+<script>
+function redirectToRecommendation(event) {
+    event.preventDefault();
+    var kategori = document.getElementById("kategori").value;
+    var ilgiAlani = document.getElementById("ilgi_alani").value.trim();
+    if (!ilgiAlani) {
+        alert("Lütfen bir ilgi alanı girin.");
+        return;
+    }
+    window.location.href = `/tavsiye/${kategori}/?ilgi_alani=${encodeURIComponent(ilgiAlani)}`;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    var selectedCategory = "";
+
+    window.showOptions = function(category) {
+        selectedCategory = category;
+        var categoryOptions = document.getElementById("categoryOptions");
+        var topicList = document.getElementById("topicList");
+        if (categoryOptions.style.display === "block" && selectedCategory === categoryOptions.getAttribute("data-category")) {
+            categoryOptions.style.display = "none";
+            topicList.style.display = "none";
+            return;
+        }
+        categoryOptions.style.display = "block";
+        categoryOptions.setAttribute("data-category", selectedCategory);
+        topicList.style.display = "none";
+    };
+
+    var viewCoursesBtn = document.getElementById("viewCourses");
+    if (viewCoursesBtn) {
+        viewCoursesBtn.addEventListener("click", function () {
+            if (selectedCategory) {
+                window.location.href = `/ders_listesi/${selectedCategory}/`;
+            }
+        });
+    }
+
+    var viewTopicsBtn = document.getElementById("viewTopics");
+    if (viewTopicsBtn) {
+        viewTopicsBtn.addEventListener("click", function () {
+            if (selectedCategory) {
+                fetch(`/konu_basliklari/${selectedCategory}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            var topicsContainer = document.getElementById("topics");
+                            topicsContainer.innerHTML = ""; // Öncekileri temizle
+                            data.topics.forEach(topic => {
+                                var btn = document.createElement("button");
+                                btn.textContent = topic;
+                                btn.onclick = function() {
+                                    showCoursesByTopic(selectedCategory, topic);
+                                };
+                                topicsContainer.appendChild(btn);
+                            });
+                            document.getElementById("topicList").style.display = "block";
+                            document.getElementById("topicList").scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                    })
+                    .catch(error => console.error("Konu başlıkları alınırken hata oluştu:", error));
+            }
+        });
+    }
+});
+
+function showCoursesByTopic(category, topic) {
+    window.location.href = `/ders_konulari/${category}/${encodeURIComponent(topic)}/`;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ kategori_baslik }}</title>
+
+    <style>
+        /* Genel Sayfa Ayarları */
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f1e7d9;/* Hafif gri arka plan */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Kategori Başlığı */
+        .category-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        /* Ders Listesi Alanı */
+        .course-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+        }
+
+        /* Ders Kartı */
+        .course-item {
+            background: #455d7a; /* Lacivert ton */
+            color: white;
+            width: 250px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: 0.3s ease-in-out;
+        }
+
+        .course-item:hover {
+            transform: scale(1.05);
+            background: #324663; /* Hover'da daha koyu lacivert */
+        }
+
+        /* Ders Linki */
+        .course-item a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .course-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Ders Kodu */
+        .course-code {
+            font-size: 14px;
+            margin-top: 5px;
+            color: #d1d1d1;
+        }
+
+        /* Geri Dön Butonu */
+        .back-button {
+            display: inline-block;
+            margin: 30px auto 0;
+            background: #186049; /* Koyu yeşil */
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background: #124d3a; /* Hover'da daha koyu yeşil */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sayfa Başlığı -->
+    <h1 class="category-title">{{ kategori_baslik }}</h1>
+
+    <!-- Ders Listesi -->
+    <div class="course-list">
+        {% for ders in dersler %}
+            <div class="course-item">
+                <a href="{% url 'ders_detay' kategori=kategori ders_kodu=ders.ders_kodu %}">
+                    {{ ders.ders_adi }}
+                </a>
+                <div class="course-code">
+                    Ders Kodu: {{ ders.ders_kodu }}
+                </div>
+            </div>
+        {% empty %}
+            <div class="course-item">
+                <p>Bu kategoride ders bulunmamaktadır.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Geri Dön Butonu -->
+    <div style="text-align: center;">
+        <a href="{% url 'kategori_listesi' %}" class="back-button">⬅ Geri Dön</a>
+    </div>
+
+</body>
+</html>

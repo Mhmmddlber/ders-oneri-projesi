@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ konu_baslik }}</title>
+    <style>
+        /* Genel Sayfa Stili */
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #48484743; 
+            color: #333; 
+            padding: 20px;
+        }
+
+        /* Konu Başlığı */
+        .category-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Ders Listesi Konteyner */
+        .course-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Ders Kartları */
+        .course-card {
+            background: rgb(131, 145, 163);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .course-card:hover {
+            background: #e0f0ff; /* Açık mavi */
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Ders İkonu */
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            background: url('{% static "images/book_icon.png" %}') no-repeat center;
+            background-size: contain;
+        }
+
+        /* Ders Bilgileri */
+        .course-info {
+            flex: 1;
+        }
+
+        .course-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .course-title:hover {
+            color: #333;
+        }
+
+        .course-code {
+            font-size: 14px;
+            color: #161e20;
+        }
+
+       /* Geri Dön Butonu - Sabit Konum */
+.back-button {
+    position: fixed;  /* Sayfanın sol altına sabitle */
+    bottom: 20px;     /* Alt boşluk */
+    left: 20px;       /* Sol boşluk */
+    width: 120px;
+    text-align: center;
+    padding: 8px;
+    background: #1a1c1e;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.back-button:hover {
+    background: #5a6268;
+}
+
+    </style>
+</head>
+<body>
+
+    <h1 class="category-title">{{ konu_baslik }}</h1>
+
+    <div class="course-container">
+        {% for ders in dersler %}
+            <a href="{% url 'ders_detay' kategori=kategori ders_kodu=ders.ders_kodu %}" class="course-card">
+                <div class="course-icon"></div>
+                <div class="course-info">
+                    <div class="course-title">{{ ders.ders_adi }}</div>
+                    <div class="course-code">Ders Kodu: {{ ders.ders_kodu }}</div>
+                </div>
+            </a>
+        {% empty %}
+            <div class="course-card">
+                <p>Bu konuya ait ders bulunmamaktadır.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'kategori_listesi' %}" class="back-button">⬅ Geri Dön</a>
+
+</body>
+</html>

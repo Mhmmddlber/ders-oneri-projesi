@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategori Listesi ve Ders Tavsiyesi</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        h1 { color: #333; }
+        ul { list-style-type: none; padding: 0; }
+        li { background: #fff; margin: 5px 0; padding: 10px; border-radius: 5px; }
+        a { text-decoration: none; color: #007BFF; font-weight: bold; }
+        a:hover { text-decoration: underline; }
+        .content { background: #fff; padding: 20px; border-radius: 5px; margin-top: 20px; }
+        .form-group { margin-bottom: 10px; }
+        input[type="text"], select { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { background: #007BFF; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Kategoriler ve Ders Tavsiyesi</h1>
+
+    <!-- **Kategoriler Listesi** -->
+    <div class="content">
+        <h2>Kategoriler</h2>
+        <ul>
+            <li><a href="{% url 'ders_listesi' kategori='mesleki_a' %}">Mesleki A Dersleri</a></li>
+            <li><a href="{% url 'ders_listesi' kategori='mesleki_b' %}">Mesleki B Dersleri</a></li>
+            <li><a href="{% url 'ders_listesi' kategori='sosyal_secmeli' %}">Sosyal Seçmeli Dersleri</a></li>
+            <li><a href="{% url 'ders_listesi' kategori='universite_mesleki_secmeli' %}">Üniversite Mesleki Seçmeli Dersleri</a></li>
+        </ul>
+    </div>
+
+    <!-- **Ders Tavsiyesi Al Bölümü** -->
+    <div class="content">
+        <h2>Ders Tavsiyesi Al</h2>
+        <form id="recommendationForm" method="GET" onsubmit="redirectToRecommendation(event)">
+            <div class="form-group">
+                <label for="kategori">Kategori Seç:</label>
+                <select id="kategori" name="kategori">
+                    <option value="mesleki_a">Mesleki A</option>
+                    <option value="mesleki_b">Mesleki B</option>
+                    <option value="sosyal_secmeli">Sosyal Seçmeli</option>
+                    <option value="universite_mesleki_secmeli">Üniversite Mesleki Seçmeli</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ilgi_alani">İlgi Alanınızı Girin:</label>
+                <input type="text" id="ilgi_alani" name="ilgi_alani" placeholder="Örneğin: yapay zeka, finans, sanat...">
+            </div>
+            <button type="submit">Ders Öner</button>
+        </form>
+    </div>
+
+    <!-- **Kategoriye Göre Tavsiye URL'sini Güncelleme** -->
+    <script>
+        function redirectToRecommendation(event) {
+            event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+        
+            var kategori = document.getElementById("kategori").value;
+            var ilgiAlani = document.getElementById("ilgi_alani").value.trim();
+        
+            if (!kategori) {
+                alert("Lütfen bir kategori seçin!");
+                return;
+            }
+    
+            if (!ilgiAlani) {
+                alert("Lütfen ilgi alanınızı girin!");
+                return;
+            }
+        
+            // Kullanıcıyı doğru URL'ye yönlendir
+            var url = `/tavsiye/${kategori}/?ilgi_alani=${encodeURIComponent(ilgiAlani)}`;
+            console.log("Yönlendirilen URL:", url);  // ✅ LOG EKLENDİ - Tarayıcı Konsolunda Görünecek
+            window.location.href = url;
+        }
+    </script>
+    
+
+</body>
+</html>

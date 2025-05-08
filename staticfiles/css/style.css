@@ -1,0 +1,7 @@
+body {
+    background-image: url("/static/1.jpg");
+    background-size: cover; /* Resmi ekran boyutuna göre ölçekler */
+    background-position: center center; /* Resmi ortalar */
+    background-repeat: no-repeat; /* Tekrar etmesini engeller */
+    background-attachment: fixed; /* Sayfa kaydırıldığında arka planı sabitler */
+}

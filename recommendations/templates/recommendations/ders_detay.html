@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ders.ders_adi }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Ders Başlığı */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 20px;
+    display: inline-block;
+    border-bottom: 4px solid #000; /* Çizgiyi yazının altına veriyoruz */
+    padding-bottom: 8px;
+}
+
+
+        .header hr {
+            width: 80px;
+            height: 4px;
+            background-color: #000;
+            margin: auto;
+            border: none;
+            border-radius: 2px;
+        }
+
+        /* Ana içerik düzeni */
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .left-column {
+            flex: 1.7;
+            background: rgb(241, 239, 239);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .right-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-item {
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .info-item strong {
+            color: #495057;
+        }
+
+        /* Yorumlar Bölümü */
+        .comments-section, .comment-form {
+            background: rgb(241, 239, 239);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .comments-section h3, .comment-form h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        .comment {
+            font-size: 14px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comment strong {
+            color: #044c16;
+        }
+
+        /* Yorum Formu */
+        .comment-form textarea {
+    width: 100%;
+    height: 80px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    background-color: rgb(241, 239, 239); 
+}
+
+
+        .submit-button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #218838;
+        }
+
+        /* Geri Dön Butonu */
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #006400;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .back-button:hover {
+            background: #004d00;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>{{ ders.ders_adi }} ({{ ders.ders_kodu }})</h1>
+    </div>
+    
+
+    <div class="container">
+        <!-- Sol Tarafta Ders Bilgileri -->
+        <div class="left-column">
+            <div class="info-item"><strong>Ön Koşullar:</strong> {{ ders.on_kosullar|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Yarıyıl:</strong> {{ ders.yariyil|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Dersin Dili:</strong> {{ ders.dersin_dili|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Dersin Seviyesi:</strong> {{ ders.dersin_seviyesi|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Ders Kategorisi:</strong> {{ ders.ders_kategorisi|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Dersi Sunan Akademik Birim:</strong> {{ ders.dersi_sunan_birim|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Dersin Amacı:</strong> {{ ders.dersin_amaci|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Ders İçeriği:</strong> {{ ders.dersin_icerigi|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Ders Kitapları:</strong> {{ ders.ders_kitaplari|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Ders Öğrenim Çıktıları:</strong> {{ ders.ders_ogrenim_ciktilari|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Haftalık Konular:</strong> {{ ders.haftalik_konular|default:"Belirtilmemiş" }}</div>
+            <div class="info-item"><strong>Değerlendirme Sistemi:</strong> {{ ders.degerlendirme_sistemi|default:"Belirtilmemiş" }}</div>
+        </div>
+
+        <!-- Sağ Tarafta Yorumlar -->
+        <div class="right-column">
+            <div class="comments-section">
+                <h3>Yorumlar</h3>
+                {% if yorumlar %}
+                    {% for yorum in yorumlar %}
+                        <div class="comment">
+                            <strong>{{ yorum.created_at|date:"d M Y H:i" }}</strong>: {{ yorum.yorum }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Henüz yorum yapılmamış.</p>
+                {% endif %}
+            </div>
+
+            <div class="comment-form">
+                <h3>Yorum Ekle</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="submit-button">Gönder</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Geri Dön -->
+    <a href="{% url 'ders_listesi' kategori=kategori|default:'mesleki_a' %}" class="back-button">⬅ Geri Dön</a>
+
+</body>
+</html>
